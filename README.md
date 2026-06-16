@@ -1,6 +1,5 @@
 # 🚀 PRO-LIFT Analytics: Mission Control
 ### Predictive Maintenance System for Rocket Boosters Engine Telemetry
-**Developed by:** PLAN B Team
 
 ---
 
