@@ -1,64 +1,182 @@
-# 🚀 PRO-LIFT Analytics: Mission Control
-### Predictive Maintenance System for Rocket Boosters Engine Telemetry
+# PRO-LIFT Analytics: Mission Control
+
+## Predictive Maintenance and Explainable AI Platform for Rocket Booster Telemetry Monitoring
+
+### Project Overview
+
+**PRO-LIFT Analytics** is an end-to-end Predictive Maintenance (PdM) and Explainable AI (XAI) platform developed with Streamlit for monitoring the operational health of rocket booster engines. Leveraging the NASA CMAPSS (Commercial Modular Aero-Propulsion System Simulation) dataset, the system analyzes multi-sensor telemetry data to detect degradation patterns, estimate equipment lifespan, and support proactive maintenance decisions.
+
+The platform is designed to reduce the risk of mission-critical failures by combining predictive analytics with interpretable machine learning models that provide actionable insights into engine health and performance.
+
+### Objectives
+
+The system incorporates two complementary machine learning frameworks:
+
+#### Remaining Useful Life (RUL) Prediction
+
+A regression-based model estimates the remaining operational cycles of each booster, enabling maintenance planning before critical failures occur.
+
+#### Health State Classification
+
+A multi-class classification model categorizes booster health into operational risk levels:
+
+* **Healthy**
+* **Warning**
+* **Critical**
+
+This dual-model approach provides both quantitative lifespan estimates and qualitative health assessments.
 
 ---
 
-## 📌 Project Overview
-**PRO-LIFT Analytics** is an advanced end-to-end Predictive Maintenance (PdM) and Explainable AI (XAI) dashboard powered by **Streamlit**. Utilizing the renowned **NASA CMAPS (Turbofan Engine Degradation Simulation) dataset**, the system ingests multi-sensor telemetry streams from rocket boosters to monitor structural health in real-time. 
+## Key Features
 
-The core objective is to mitigate catastrophic mission failures by dual-modeling the telemetry data:
-1. **Regression System:** To accurately predict the **Remaining Useful Life (RUL)** of active boosters (T-minus cycles).
-2. **Classification System:** To categorize booster health states into localized tiers (**Healthy**, **Warning**, **Critical**).
+### Real-Time Telemetry Integration
+
+Interactive CSV-based data ingestion simulates live telemetry streams from operational booster systems, enabling real-time monitoring and analysis.
+
+### Digital Twin Monitoring
+
+Individual booster units can be analyzed through a digital twin interface that visualizes degradation trajectories, health indicators, and operational trends using dynamic gauges and interactive charts.
+
+### Explainable AI Diagnostics
+
+Integrated feature importance analysis identifies the sensors and operational parameters that contribute most significantly to performance degradation and maintenance predictions.
+
+### Advanced Visualization Dashboard
+
+A modern mission-control-inspired interface built with Streamlit and custom CSS delivers an intuitive monitoring experience through interactive dashboards, real-time metrics, and rich data visualizations.
 
 ---
 
-## 🚀 Key Features
-*   **📡 Live Telemetry Stream Sync:** Interactive CSV uploading mechanism simulating a live satellite link to orbital boosters.
-*   **🔭 Digital Twin Framework:** Deep-dive analysis for individual boosters tracking their custom propulsion degradation curves using dynamic Gauge meters and Plotly line paths.
-*   **🔬 System Diagnostics:** Fully integrated Feature Importance breakdown directly evaluating which modules or sensors are the main drivers behind thermal and mechanical degradation.
-*   **🎨 Futuristic UI/UX Design:** Cyberpunk/Space-themed design built entirely using CSS hacks over Streamlit components (`blur filters`, custom metrics, and neon gradients).
+## Data Science Pipeline
+
+### 1. Data Understanding and Preprocessing
+
+#### Feature Engineering
+
+The dataset consists of:
+
+* Three operational setting variables
+
+  * `op_setting_1`
+  * `op_setting_2`
+  * `op_setting_3`
+* Twenty-one continuous sensor measurements
+
+#### Data Cleaning
+
+Sensors exhibiting zero variance across operational cycles were removed to reduce redundancy, improve computational efficiency, and mitigate multicollinearity.
+
+#### Remaining Useful Life Calculation
+
+Remaining Useful Life (RUL) was calculated for each engine unit by subtracting the current cycle count from the maximum observed cycle count. Target values were capped at 125 cycles to reduce bias during early-stage degradation periods and improve model stability.
 
 ---
-
-## 📊 Pipeline & Data Science Methodology
-
-### 1. Data Understanding & Preprocessing
-*   **Feature Structural Definition:** Mapping operational settings (`op_setting_1`, `op_setting_2`, `op_setting_3`) alongside 21 continuous telemetry sensor readings.
-*   **Data Cleaning:** Identification and dropping of redundant sensors displaying **zero variance** (constant readings across cycles) to optimize computational efficiency and avoid multi-collinearity.
-*   **RUL Optimization:** Computed the absolute Remaining Useful Life (RUL) per unit by capturing `max_cycles` and clipping the upper bound target at **125 cycles** to robustly handle initial steady-state operational phases.
 
 ### 2. Exploratory Data Analysis (EDA)
-*   **Univariate Analysis:** Generated Histograms with KDE lines and Boxplots across all sensor metrics to detect extreme telemetry skewness and outliers.
-*   **Bivariate Analysis:** Plotted massive multi-variable correlation heatmaps to assess structural dependencies and negative linear traits between telemetry trends and structural degradation (RUL).
-*   **Target Segmentation:** Multi-tier target engineering mapping the exact boundaries for machine state transitions:
-    *   🟢 **Healthy:** $RUL > 100\text{ cycles}$
-    *   🟡 **Warning:** $50 < RUL \le 100\text{ cycles}$
-    *   🔴 **Critical:** $RUL \le 50\text{ cycles}$
 
-### 3. Model Architecture & Deployment
-The operational backend relies on pre-trained serialized model assets (`.pkl`):
-*   **Regression Pipeline:** Scaled input features through a fitted `StandardScaler` to output exact numerical RUL steps.
-*   **Classification Pipeline:** Powered by a balanced multi-class classifier using specialized target labels encoded via `LabelEncoder` to predict tactical alerts (`Critical`, `Warning`, `Healthy`).
+#### Univariate Analysis
+
+Statistical distributions of sensor readings were examined using:
+
+* Histograms
+* Kernel Density Estimation (KDE) plots
+* Box plots
+
+This analysis facilitated the identification of skewed distributions, anomalies, and outliers.
+
+#### Correlation Analysis
+
+Correlation heatmaps were generated to evaluate relationships among sensor measurements and identify variables strongly associated with engine degradation and RUL.
+
+#### Health State Definition
+
+Operational states were engineered based on RUL thresholds:
+
+| Health State | Remaining Useful Life |
+| ------------ | --------------------- |
+| Healthy      | RUL > 100 cycles      |
+| Warning      | 50 < RUL ≤ 100 cycles |
+| Critical     | RUL ≤ 50 cycles       |
 
 ---
 
-## 🛠️ Tech Stack & Architecture
-*   **Core Logic:** Python 3.x, Pandas, NumPy, Scipy, Scikit-Learn
-*   **Data Visualization:** Plotly Express, Plotly Graph Objects, Seaborn, Matplotlib
-*   **Imbalanced Learning Handling:** SMOTE (Synthetic Minority Over-sampling Technique)
-*   **UI/UX Deployment:** Streamlit, Custom CSS HTML Components
-*   **Model Serialization:** Joblib
+### 3. Model Development and Deployment
+
+#### Regression Pipeline
+
+A trained regression model predicts the exact Remaining Useful Life of an engine using standardized telemetry features processed through a fitted `StandardScaler`.
+
+#### Classification Pipeline
+
+A balanced multi-class classification model predicts operational health states and generates maintenance alerts. Target labels are encoded using a fitted `LabelEncoder`.
+
+#### Model Deployment
+
+All trained models and preprocessing artifacts are serialized and deployed within the Streamlit application to enable fast and consistent inference.
 
 ---
 
-## 📁 File Structure & Assets
+## Technology Stack
+
+### Programming & Machine Learning
+
+* Python 3.x
+* Pandas
+* NumPy
+* SciPy
+* Scikit-learn
+
+### Data Visualization
+
+* Plotly Express
+* Plotly Graph Objects
+* Matplotlib
+* Seaborn
+
+### Imbalanced Data Handling
+
+* SMOTE (Synthetic Minority Over-sampling Technique)
+
+### Deployment & User Interface
+
+* Streamlit
+* Custom CSS Components
+
+### Model Persistence
+
+* Joblib
+
+---
+
+## Project Structure
+
 ```text
 ├── .streamlit/
-│   └── config.toml           # Streamlit environment configs
-├── reg_model.pkl             # Serialized Regression Model (RUL Engine)
-├── cls_model.pkl             # Serialized Multi-class Classifier (Status)
-├── scaler.pkl                # Fitted StandardScaler object
-├── label_encoder.pkl         # Fitted LabelEncoder for state labels
-├── features_list.pkl         # Saved Python list of optimal features
-├── app.py                    # Main Streamlit "Mission Control" script
-└── README.md                 # System Documentation
+│   └── config.toml
+├── reg_model.pkl
+├── cls_model.pkl
+├── scaler.pkl
+├── label_encoder.pkl
+├── features_list.pkl
+├── app.py
+└── README.md
+```
+
+### Asset Description
+
+| File                | Description                                              |
+| ------------------- | -------------------------------------------------------- |
+| `reg_model.pkl`     | Trained regression model for RUL prediction              |
+| `cls_model.pkl`     | Trained classification model for health-state prediction |
+| `scaler.pkl`        | Fitted feature scaling object                            |
+| `label_encoder.pkl` | Label encoder for health-state classes                   |
+| `features_list.pkl` | Selected feature set used during training                |
+| `app.py`            | Main Streamlit application                               |
+| `README.md`         | Project documentation                                    |
+
+---
+
+## Impact
+
+PRO-LIFT Analytics demonstrates how predictive maintenance, machine learning, and explainable AI can be integrated into a unified decision-support system for aerospace applications. By providing accurate Remaining Useful Life estimates, health-state classification, and transparent diagnostic insights, the platform enables more reliable maintenance planning, improved operational safety, and reduced risk of mission failure.
